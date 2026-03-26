@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MLBB WR Tracker</title>
+
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>MLBB WR Tracker</h1>
+
+  <div class="add-form">
+    <input type="text" id="hero" list="heroList" placeholder="Nama Hero">
+    <datalist id="heroList"></datalist>
+
+    <input type="number" id="matchAwal" placeholder="Match Awal">
+    <input type="number" id="wrAwal" placeholder="WR Awal (%)">
+    <input type="number" id="wrTarget" placeholder="WR Target (%)">
+
+    <button onclick="tambahHero()">Tambah / Update</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Hero</th>
+        <th>Match</th>
+        <th>WR</th>
+        <th>Target</th>
+        <th>Win</th>
+        <th>Lose</th>
+        <th>Sisa</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+
+  <div class="chart-container">
+    <canvas id="chart"></canvas>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

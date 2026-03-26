@@ -1,0 +1,80 @@
+body {
+  font-family: 'Segoe UI';
+  background: #0f172a;
+  color: white;
+  margin: 0;
+  padding: 10px;
+}
+
+.container {
+  max-width: 1000px;
+  margin: auto;
+}
+
+h1 {
+  text-align: center;
+}
+
+.add-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.add-form input {
+  flex: 1 1 120px;
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+}
+
+button {
+  padding: 8px;
+  background: #22c55e;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: white;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #1e293b;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+th, td {
+  padding: 8px;
+  text-align: center;
+}
+
+th {
+  background: #334155;
+}
+
+input.table-input {
+  width: 50px;
+  padding: 4px;
+  border-radius: 5px;
+  border: none;
+}
+
+.delete {
+  background: red;
+}
+
+.chart-container {
+  margin-top: 20px;
+  background: #1e293b;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+@media (max-width:600px){
+  .add-form {
+    flex-direction: column;
+  }
+}
