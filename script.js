@@ -16,6 +16,36 @@ const auth = firebase.auth();
 let heroes = [];
 let userId = null;
 
+// LIST HERO MLBB
+const heroListData = [
+"Aamon", "Akai", "Aldous", "Alice", "Alpha", "Alucard", "Angela", 
+"Argus", "Arlott", "Atlas", "Aulus", "Aurora", "Badang", "Balmond", 
+"Bane", "Barats", "Baxia", "Beatrix", "Belerick", "Benedetta", "Brody", 
+"Carmilla", "Cecilion", "Chang’e", "Chip", "Chou", "Cici", "Clint", "Claude", 
+"Cyclops", "Diggie", "Dyrroth", "Edith", "Esmeralda", "Estes", "Eudora", "Fanny", 
+"Faramis", "Floryn", "Franco", "Fredrinn", "Freya", "Gatotkaca", "Gloo", "Gord", 
+"Grock", "Granger", "Gusion", "Guinevere", "Hanabi", "Hanzo", "Harley", "Harith", 
+"Hayabusa", "Helcurt", "Hilda", "Hylos", "Irithel", "Ixia", "Jawhead", "Johnson", 
+"Joy", "Julian", "Kadita", "Kagura", "Kaja", "Kalea", "Karina", "Karrie", "Khaleed", 
+"Khufra", "Kimmy", "Lancelot", "Lapu-Lapu", "Lesley", "Leomord", "Ling", "Lolita", 
+"Luo Yi", "Lukas", "Lunox", "Lylia", "Marcel", "Martis", "Masha", "Mathilda", "Melissa", 
+"Minotaur", "Miya", "Moskov", "Nana", "Natan", "Natalia", "Nolan", "Novaria", "Obsidia", 
+"Odette", "Paquito", "Pharsa", "Phoveus", "Popol and Kupa", "Rafaela", "Roger", "Ruby", 
+"Saber", "Selena", "Silvanna", "Sora", "Sun", "Suyou", "Terizla", "Thamuz", "Tigreal", 
+"Uranus", "Valentina", "Vale", "Valir", "Vexana", "Wanwan", "Xavier", "X.Borg", 
+"Yi Sun-shin", "Yin", "Yve", "Yu Zhong", "Zhask", "Zhuxin", "Zilong", "Zetian"
+
+];
+
+// LOAD KE DATALIST
+const heroList = document.getElementById("heroList");
+
+heroListData.forEach(hero=>{
+    const option = document.createElement("option");
+    option.value = hero;
+    heroList.appendChild(option);
+});
+
 // 🔥 HANDLE REDIRECT RESULT (WAJIB UNTUK HP)
 auth.getRedirectResult()
     .then((result) => {
