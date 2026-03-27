@@ -1,55 +1,59 @@
-    <!DOCTYPE html>
-    <html lang="id">
-    <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MLBB WR Tracker by Dayy</title>
-    <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MLBB WR Tracker by Dayy</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-    <h1>MLBB WR Tracker by Dayy</h1>
+<h1>MLBB WR Tracker</h1>
+<h1>by Dayy</h1>
 
-    <div class="container">
+<div class="container">
 
-    <div class="form-row">
-        <input id="hero" list="heroList" placeholder="Nama Hero">
-        <datalist id="heroList"></datalist>
+<div class="form-row">
+    <input id="hero" list="heroList" placeholder="Nama Hero">
+    <datalist id="heroList"></datalist>
 
-        <input id="matchAwal" type="number" placeholder="Match Awal">
-        <input id="wrAwal" type="number" placeholder="WR Awal (%)">
-        <input id="wrTarget" type="number" placeholder="WR Target (%)">
+    <input id="matchAwal" type="number" placeholder="Match Awal">
+    <input id="wrAwal" type="number" placeholder="WR Awal (%)">
+    <input id="wrTarget" type="number" placeholder="WR Target (%)">
 
-        <button onclick="tambahHero()">Tambah</button>
-    </div>
+    <button onclick="tambahHero()">Tambah</button>
+</div>
 
-    <div class="table-wrapper">
-        <table>
-        <thead>
-            <tr>
-            <th>Hero</th>
-            <th>Match</th>
-            <th>WR</th>
-            <th>Target</th>
-            <th>Win</th>
-            <th>Lose</th>
-            <th>Sisa</th>
-            <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody id="tableBody"></tbody>
-        </table>
-    </div>
+<div class="table-wrapper">
+    <table>
+    <thead>
+        <tr>
+        <th>Hero</th>
+        <th>Match</th>
+        <th>WR</th>
+        <th>Target</th>
+        <th>Win</th>
+        <th>Lose</th>
+        <th>Sisa</th>
+        <th>Aksi</th>
+        </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+    </table>
+</div>
 
-    <!-- Grafik -->
-    <div class="chart-container">
-        <canvas id="chartWR"></canvas>
-    </div>
+<div class="chart-container">
+    <canvas id="chartWR"></canvas>
+</div>
 
-    </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="script.js"></script>
 
-    </body>
-    </html>
+<footer class="footer">
+    Sponsored by <span>I am Dayy</span>
+</footer>
+
+</body>
+</html>
