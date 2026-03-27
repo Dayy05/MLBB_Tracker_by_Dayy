@@ -2,6 +2,18 @@ let heroes = JSON.parse(localStorage.getItem("heroes")) || [];
 let chart;
 let selectedHeroIndex = null;
 
+// 🔥 NOTIF FUNCTION
+function showNotif(text, type="success"){
+    const notif = document.getElementById("notif");
+
+    notif.innerText = text;
+    notif.className = "notif show " + type;
+
+    setTimeout(()=>{
+        notif.classList.remove("show");
+    }, 2000);
+}
+
 // HERO LIST
 const heroListData = ["Aamon","Akai","Aldous","Alice","Alpha","Alucard","Angela","Argus","Arlott","Atlas","Aulus","Aurora","Badang","Balmond","Bane","Barats","Baxia","Beatrix","Belerick","Benedetta","Brody","Carmilla","Cecilion","Chang’e","Chip","Chou","Cici","Clint","Claude","Cyclops","Diggie","Dyrroth","Edith","Esmeralda","Estes","Eudora","Fanny","Faramis","Floryn","Franco","Fredrinn","Freya","Gatotkaca","Gloo","Gord","Grock","Granger","Gusion","Guinevere","Hanabi","Hanzo","Harley","Harith","Hayabusa","Helcurt","Hilda","Hylos","Irithel","Ixia","Jawhead","Johnson","Joy","Julian","Kadita","Kagura","Kaja","Kalea","Karina","Karrie","Khaleed","Khufra","Kimmy","Lancelot","Lapu-Lapu","Lesley","Leomord","Ling","Lolita","Luo Yi","Lukas","Lunox","Lylia","Marcel","Martis","Masha","Mathilda","Melissa","Minotaur","Miya","Moskov","Nana","Natan","Natalia","Nolan","Novaria","Obsidia","Odette","Paquito","Pharsa","Phoveus","Popol and Kupa","Rafaela","Roger","Ruby","Saber","Selena","Silvanna","Sora","Sun","Suyou","Terizla","Thamuz","Tigreal","Uranus","Valentina","Vale","Valir","Vexana","Wanwan","Xavier","X.Borg","Yi Sun-shin","Yin","Yve","Yu Zhong","Zhask","Zhuxin","Zilong","Zetian"];
 
@@ -14,7 +26,6 @@ window.onload = () => {
     });
 
     render();
-    setDeviceClass();
 };
 
 // HITUNG
@@ -31,10 +42,13 @@ function hitung(h){
     return {match, wr, sisa};
 }
 
-// TAMBAH HERO
+// 🔥 TAMBAH / REPLACE HERO
 function tambahHero(){
-    let h = {
-        hero: hero.value,
+    let heroName = hero.value.trim();
+    if(!heroName) return;
+
+    let newData = {
+        hero: heroName,
         matchAwal: +matchAwal.value,
         wrAwal: +wrAwal.value / 100,
         wrTarget: +wrTarget.value / 100,
@@ -43,8 +57,22 @@ function tambahHero(){
         history: []
     };
 
-    heroes.push(h);
+    let index = heroes.findIndex(h => h.hero.toLowerCase() === heroName.toLowerCase());
+
+    if(index !== -1){
+        heroes[index] = newData;
+        showNotif("Data berhasil di update!", "update");
+    } else {
+        heroes.push(newData);
+        showNotif("Hero berhasil ditambahkan!");
+    }
+
     saveData();
+
+    hero.value = "";
+    matchAwal.value = "";
+    wrAwal.value = "";
+    wrTarget.value = "";
 }
 
 // REBUILD HISTORY
@@ -61,10 +89,6 @@ function updateWin(i,val){
     heroes[i].win = parseInt(val) || 0;
     rebuildHistory(i);
     saveData();
-
-    if(selectedHeroIndex !== null){
-        renderChart(selectedHeroIndex);
-    }
 }
 
 // UPDATE LOSE
@@ -72,10 +96,6 @@ function updateLose(i,val){
     heroes[i].lose = parseInt(val) || 0;
     rebuildHistory(i);
     saveData();
-
-    if(selectedHeroIndex !== null){
-        renderChart(selectedHeroIndex);
-    }
 }
 
 // SAVE
@@ -101,7 +121,7 @@ function generateWRHistory(h){
     return data;
 }
 
-// RENDER CHART
+// CHART
 function renderChart(index){
     if(!heroes[index]) return;
 
@@ -135,7 +155,6 @@ function renderChart(index){
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            animation: { duration: 300 },
             plugins: {
                 legend: { labels: { color: "white" } }
             },
@@ -147,7 +166,7 @@ function renderChart(index){
     });
 }
 
-// RENDER TABLE
+// RENDER
 function render(){
     let tbody = document.getElementById("tableBody");
     tbody.innerHTML = "";
@@ -173,22 +192,5 @@ function render(){
 function hapus(i){
     heroes.splice(i,1);
     saveData();
+    showNotif("Hero dihapus!", "delete");
 }
-
-// 🔥 AUTO DEVICE DETECT
-function setDeviceClass(){
-    const width = window.innerWidth;
-    const app = document.getElementById("app");
-
-    app.classList.remove("mobile","tablet","desktop");
-
-    if(width <= 600){
-        app.classList.add("mobile");
-    } else if(width <= 1023){
-        app.classList.add("tablet");
-    } else {
-        app.classList.add("desktop");
-    }
-}
-
-window.addEventListener("resize", setDeviceClass);

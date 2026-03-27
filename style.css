@@ -3,8 +3,6 @@ margin: 0;
 font-family: 'Segoe UI', sans-serif;
 background: #020617;
 color: white;
-
-/* 🔥 penting biar konten tidak ketutup footer */
 padding-bottom: 90px;
 }
 
@@ -114,11 +112,8 @@ padding: 10px;
 border-radius: 12px;
 }
 
-/* ========================= */
-/* 📱 MOBILE */
-/* ========================= */
+/* MOBILE */
 @media (max-width: 600px) {
-
 .form-row {
     flex-direction: column;
 }
@@ -136,11 +131,8 @@ th, td {
 }
 }
 
-/* ========================= */
-/* 💻 DESKTOP (PC & TABLET) */
-/* ========================= */
+/* DESKTOP */
 @media (min-width: 1024px) {
-
 .container {
     width: 85%;
 }
@@ -168,37 +160,48 @@ th, td {
 }
 }
 
-/* ========================= */
-/* 🔥 FIXED FOOTER ALL DEVICE */
-/* ========================= */
+/* 🔥 FOOTER */
 .footer {
 position: fixed;
 bottom: 0;
 left: 0;
 right: 0;
-
-width: 100%;
 text-align: center;
-
-/* ukuran beda biar proporsional */
 padding: 12px;
 padding-bottom: calc(12px + env(safe-area-inset-bottom));
-
 background: rgba(2, 6, 23, 0.95);
 border-top: 1px solid #1e293b;
-
 color: #94a3b8;
 font-size: 13px;
-
 z-index: 9999;
-
-/* 🔥 anti bug iOS & Android */
 transform: translateZ(0);
--webkit-transform: translateZ(0);
 }
 
-/* TEXT */
-.footer span {
-color: #22c55e;
-font-weight: bold;
+/* NOTIF */
+.notif {
+position: fixed;
+top: 20px;
+left: 50%;
+transform: translateX(-50%) translateY(-20px);
+background: #22c55e;
+color: white;
+padding: 12px 20px;
+border-radius: 10px;
+font-size: 14px;
+opacity: 0;
+z-index: 99999;
+transition: all 0.3s ease;
+}
+
+.notif.show {
+opacity: 1;
+transform: translateX(-50%) translateY(0);
+}
+
+.notif.update {
+background: #3b82f6;
+}
+
+.notif.delete {
+background: #ef4444;
 }
