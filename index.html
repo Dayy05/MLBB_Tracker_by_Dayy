@@ -1,54 +1,53 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MLBB WR Tracker by Dayy</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MLBB WR Tracker by Dayy</title>
 
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 </head>
 
 <body>
 
 <div class="container">
-    <h1>MLBB WR Tracker by Dayy</h1>
 
-    <div class="add-form">
-    <input type="text" id="hero" list="heroList" placeholder="Nama Hero">
-    <datalist id="heroList"></datalist>
+<h1>MLBB WR Tracker by Dayy</h1>
 
-    <input type="number" id="matchAwal" placeholder="Match Awal">
-    <input type="number" id="wrAwal" placeholder="WR Awal (%)">
-    <input type="number" id="wrTarget" placeholder="WR Target (%)">
-
-    <button onclick="tambahHero()">Tambah / Update</button>
-    <button onclick="resetData()">Reset</button>
-    </div>
-
-    <table>
-    <thead>
-        <tr>
-        <th>Hero</th>
-        <th>Match</th>
-        <th>WR</th>
-        <th>Target</th>
-        <th>Win</th>
-        <th>Lose</th>
-        <th>Sisa</th>
-        <th>Aksi</th>
-        </tr>
-    </thead>
-    <tbody id="tableBody"></tbody>
-    </table>
-
-    <div class="chart-container">
-    <canvas id="chart"></canvas>
-    </div>
+<!-- LOGIN -->
+<div class="auth-box">
+    <button onclick="login()">Login Google</button>
+    <button onclick="logout()">Logout</button>
+    <p id="userInfo"></p>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<div class="add-form">
+<input id="hero" placeholder="Nama Hero">
+<input id="matchAwal" type="number" placeholder="Match Awal">
+<input id="wrAwal" type="number" placeholder="WR Awal (%)">
+<input id="wrTarget" type="number" placeholder="WR Target (%)">
+
+<button onclick="tambahHero()">Tambah</button>
+</div>
+
+<table>
+<thead>
+<tr>
+<th>Hero</th><th>Match</th><th>WR</th><th>Target</th>
+<th>Win</th><th>Lose</th><th>Sisa</th><th>Aksi</th>
+</tr>
+</thead>
+<tbody id="tableBody"></tbody>
+</table>
+
+</div>
 
 <script src="script.js"></script>
 </body>

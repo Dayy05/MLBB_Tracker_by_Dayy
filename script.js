@@ -1,3 +1,4 @@
+// FIREBASE CONFIG
 const firebaseConfig = {
     apiKey: "AIzaSyCB4_G4di66IvL_2wcR6krQbP9vseutXuo",
     authDomain: "mlbb-wr-tracker-by-dayy.firebaseapp.com",
@@ -7,82 +8,38 @@ const firebaseConfig = {
     appId: "1:570200071305:web:47b0c9fd12780cfff33a58"
 };
 
-// INIT FIREBASE
+// INIT
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+const auth = firebase.auth();
 
 let heroes = [];
-let chart;
+let userId = null;
 
-// AUTO SAVE
-function saveData(){
-    localStorage.setItem("mlbb_tracker", JSON.stringify(heroes));
+// LOGIN
+function login(){
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider);
 }
 
-function loadData(){
-    let data = localStorage.getItem("mlbb_tracker");
-    if(data){
-    heroes = JSON.parse(data);
-    }
+// LOGOUT
+function logout(){
+    auth.signOut();
 }
 
-// HERO LIST
-const heroList = [
-"Aamon", "Akai", "Aldous", "Alice", "Alpha", "Alucard", "Angela", 
-"Argus", "Arlott", "Atlas", "Aulus", "Aurora", "Badang", "Balmond", 
-"Bane", "Barats", "Baxia", "Beatrix", "Belerick", "Benedetta", "Brody", 
-"Carmilla", "Cecilion", "Chang’e", "Chip", "Chou", "Cici", "Clint", 
-"Claude", "Cyclops", "Diggie", "Dyrroth", "Edith", "Esmeralda", "Estes", 
-"Eudora", "Fanny", "Faramis", "Floryn", "Franco", "Fredrinn", "Freya", 
-"Gatotkaca", "Gloo", "Gord", "Grock", "Granger", "Gusion", "Guinevere", 
-"Hanabi", "Hanzo", "Harley", "Harith", "Hayabusa", "Helcurt", "Hilda", 
-"Hylos", "Irithel", "Ixia", "Jawhead", "Johnson", "Joy", "Julian", 
-"Kadita", "Kagura", "Kaja", "Kalea", "Karina", "Karrie", "Khaleed", 
-"Khufra", "Kimmy", "Lancelot", "Lapu-Lapu", "Lesley", "Leomord", "Ling", 
-"Lolita", "Luo Yi", "Lukas", "Lunox", "Lylia", "Marcel", "Martis", 
-"Masha", "Mathilda", "Melissa", "Minotaur", "Miya", "Moskov", "Nana", 
-"Natan", "Natalia", "Nolan", "Novaria", "Obsidia", "Odette", "Paquito", 
-"Pharsa", "Phoveus", "Popol and Kupa", "Rafaela", "Roger", "Ruby", 
-"Saber", "Selena", "Silvanna", "Sora", "Sun", "Suyou", "Terizla", 
-"Thamuz", "Tigreal", "Uranus", "Valentina", "Vale", "Valir", "Vexana", 
-"Wanwan", "Xavier", "X.Borg", "Yi Sun-shin", "Yin", "Yve", "Yu Zhong", 
-"Zhask", "Zhuxin", "Zilong", "Zetian"
-
-];
-
-// LOAD AUTOCOMPLETE
-const list = document.getElementById("heroList");
-heroList.forEach(h=>{
-    let option=document.createElement("option");
-    option.value=h;
-    list.appendChild(option);
-});
-
-// LOAD DATA
-loadData();
-
-// TAMBAH / UPDATE
-function tambahHero(){
-    let hero=document.getElementById("hero").value.trim();
-    let matchAwal=parseFloat(document.getElementById("matchAwal").value);
-    let wrAwal=parseFloat(document.getElementById("wrAwal").value)/100;
-    let wrTarget=parseFloat(document.getElementById("wrTarget").value)/100;
-
-    if(!hero||!matchAwal||!wrAwal||!wrTarget) return;
-
-    let existing=heroes.find(h=>h.hero.toLowerCase()===hero.toLowerCase());
-
-    if(existing){
-    existing.matchAwal=matchAwal;
-    existing.wrAwal=wrAwal;
-    existing.wrTarget=wrTarget;
+// DETECT USER
+auth.onAuthStateChanged(user=>{
+    if(user){
+    userId = user.uid;
+    document.getElementById("userInfo").innerText = user.email;
+    loadData();
     } else {
-    heroes.push({hero,matchAwal,wrAwal,wrTarget,win:0,lose:0});
-    }
-
-    saveData();
+    userId = null;
+    heroes = [];
     render();
-}
+    document.getElementById("userInfo").innerText = "";
+    }
+});
 
 // HITUNG
 function hitung(h){
@@ -97,18 +54,42 @@ function hitung(h){
     return {match,wr,sisa};
 }
 
-// HISTORY
-function generateHistory(h){
-    let history=[];
-    let winBase=h.matchAwal*h.wrAwal;
-    let matchBase=h.matchAwal;
+// TAMBAH HERO
+function tambahHero(){
+    if(!userId) return alert("Login dulu!");
 
-    for(let i=1;i<=h.win+h.lose;i++){
-    if(i<=h.win) winBase++;
-    matchBase++;
-    history.push((winBase/matchBase*100).toFixed(1));
-    }
-    return history;
+    let h={
+    hero:hero.value,
+    matchAwal:+matchAwal.value,
+    wrAwal:+wrAwal.value/100,
+    wrTarget:+wrTarget.value/100,
+    win:0,
+    lose:0
+    };
+
+    heroes.push(h);
+    saveData();
+}
+
+// SAVE
+function saveData(){
+    if(!userId) return;
+
+    db.collection("users").doc(userId).set({
+    heroes:heroes
+    });
+}
+
+// REALTIME LOAD
+function loadData(){
+    db.collection("users")
+    .doc(userId)
+    .onSnapshot(doc=>{
+        if(doc.exists){
+        heroes = doc.data().heroes;
+        render();
+        }
+    });
 }
 
 // RENDER
@@ -121,59 +102,31 @@ function render(){
 
     tbody.innerHTML+=`
     <tr>
-        <td onclick="showDetail(${i})">${h.hero}</td>
+        <td>${h.hero}</td>
         <td>${r.match}</td>
         <td>${(r.wr*100).toFixed(1)}%</td>
         <td>${(h.wrTarget*100)}%</td>
-        <td><input class="table-input" type="number" value="${h.win}" onchange="updateWin(${i},this.value)"></td>
-        <td><input class="table-input" type="number" value="${h.lose}" onchange="updateLose(${i},this.value)"></td>
+        <td><input type="number" value="${h.win}" onchange="updateWin(${i},this.value)"></td>
+        <td><input type="number" value="${h.lose}" onchange="updateLose(${i},this.value)"></td>
         <td>${r.sisa}</td>
-        <td><button class="delete" onclick="hapus(${i})">X</button></td>
+        <td><button onclick="hapus(${i})">X</button></td>
     </tr>`;
     });
 }
 
 // UPDATE
-function updateWin(i,val){heroes[i].win=parseInt(val)||0;saveData();render();}
-function updateLose(i,val){heroes[i].lose=parseInt(val)||0;saveData();render();}
-function hapus(i){heroes.splice(i,1);saveData();render();}
-
-// RESET
-function resetData(){
-    if(confirm("Hapus semua data?")){
-    localStorage.removeItem("mlbb_tracker");
-    heroes=[];
-    render();
-    }
+function updateWin(i,val){
+    heroes[i].win=parseInt(val)||0;
+    saveData();
 }
 
-// GRAFIK DETAIL
-function showDetail(i){
-    let h=heroes[i];
-    let history=generateHistory(h);
-
-    if(chart) chart.destroy();
-
-    chart=new Chart(document.getElementById("chart"),{
-    type:"line",
-    data:{
-        labels:history.map((_,i)=>"Match "+(i+1)),
-        datasets:[{
-        label:h.hero+" WR History",
-        data:history,
-        tension:0.3
-        }]
-    },
-    options:{
-        responsive:true,
-        plugins:{legend:{labels:{color:"white"}}},
-        scales:{
-        x:{ticks:{color:"white"}},
-        y:{ticks:{color:"white"}}
-        }
-    }
-    });
+function updateLose(i,val){
+    heroes[i].lose=parseInt(val)||0;
+    saveData();
 }
 
-// INIT
-render();
+// HAPUS
+function hapus(i){
+    heroes.splice(i,1);
+    saveData();
+}
