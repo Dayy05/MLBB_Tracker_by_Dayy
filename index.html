@@ -1,56 +1,55 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MLBB WR Tracker by Dayy</title>
+    <!DOCTYPE html>
+    <html lang="id">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLBB WR Tracker by Dayy</title>
+    <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
 
-<link rel="stylesheet" href="style.css">
+    <h1>MLBB WR Tracker by Dayy</h1>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <div class="container">
 
-<!-- FIREBASE -->
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-</head>
+    <div class="form-row">
+        <input id="hero" list="heroList" placeholder="Nama Hero">
+        <datalist id="heroList"></datalist>
 
-<body>
+        <input id="matchAwal" type="number" placeholder="Match Awal">
+        <input id="wrAwal" type="number" placeholder="WR Awal (%)">
+        <input id="wrTarget" type="number" placeholder="WR Target (%)">
 
-<div class="container">
+        <button onclick="tambahHero()">Tambah</button>
+    </div>
 
-<h1>MLBB WR Tracker by Dayy</h1>
+    <div class="table-wrapper">
+        <table>
+        <thead>
+            <tr>
+            <th>Hero</th>
+            <th>Match</th>
+            <th>WR</th>
+            <th>Target</th>
+            <th>Win</th>
+            <th>Lose</th>
+            <th>Sisa</th>
+            <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+        </table>
+    </div>
 
-<!-- LOGIN -->
-<div class="auth-box">
-    <button onclick="login()">Login Google</button>
-    <button onclick="logout()">Logout</button>
-    <p id="userInfo"></p>
-</div>
+    <!-- Grafik -->
+    <div class="chart-container">
+        <canvas id="chartWR"></canvas>
+    </div>
 
-<div class="add-form">
-<input id="hero" list="heroList" placeholder="Nama Hero">
-<datalist id="heroList"></datalist>
+    </div>
 
-<input id="matchAwal" type="number" placeholder="Match Awal">
-<input id="wrAwal" type="number" placeholder="WR Awal (%)">
-<input id="wrTarget" type="number" placeholder="WR Target (%)">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
 
-<button onclick="tambahHero()">Tambah</button>
-</div>
-
-<table>
-<thead>
-<tr>
-<th>Hero</th><th>Match</th><th>WR</th><th>Target</th>
-<th>Win</th><th>Lose</th><th>Sisa</th><th>Aksi</th>
-</tr>
-</thead>
-<tbody id="tableBody"></tbody>
-</table>
-
-</div>
-
-<script src="script.js"></script>
-</body>
-</html>
+    </body>
+    </html>
