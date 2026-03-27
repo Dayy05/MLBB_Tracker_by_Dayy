@@ -1,123 +1,266 @@
-    body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: #020617;
-    color: white;
-    }
+body {
+margin: 0;
+font-family: 'Segoe UI', sans-serif;
+background: #020617;
+color: white;
 
-    h1 {
-    text-align: center;
-    margin: 20px 0;
-    color: #22c55e;
-    }
+/* 🔥 biar konten tidak ketutup footer */
+padding-bottom: 80px;
+}
 
-    .container {
-    width: 95%;
-    margin: auto;
-    }
+h1 {
+text-align: center;
+margin: 20px 0;
+color: #22c55e;
+}
 
-    /* FORM */
-    .form-row {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 15px;
-    }
+.container {
+width: 95%;
+margin: auto;
+}
 
-    .form-row input {
-    flex: 1;
-    min-width: 120px;
-    padding: 12px;
-    border-radius: 10px;
-    border: none;
-    background: #1e293b;
-    color: white;
-    }
+/* FORM */
+.form-row {
+display: flex;
+gap: 10px;
+flex-wrap: wrap;
+margin-bottom: 15px;
+}
 
-    .form-row button {
-    padding: 12px 20px;
-    border-radius: 10px;
-    border: none;
-    background: #22c55e;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    }
+.form-row input {
+flex: 1;
+min-width: 120px;
+padding: 12px;
+border-radius: 10px;
+border: none;
+background: #1e293b;
+color: white;
+}
 
-    /* TABLE */
-    .table-wrapper {
-    overflow-x: auto;
-    }
+.form-row button {
+padding: 12px 20px;
+border-radius: 10px;
+border: none;
+background: #22c55e;
+color: white;
+font-weight: bold;
+cursor: pointer;
+}
 
-    table {
-    width: 100%;
-    border-collapse: collapse;
-    background: #1e293b;
-    }
+/* TABLE */
+.table-wrapper {
+overflow-x: auto;
+}
 
-    thead {
-    background: #334155;
-    }
+table {
+width: 100%;
+border-collapse: collapse;
+background: #1e293b;
+}
 
-    th, td {
-    padding: 12px;
-    }
+thead {
+background: #334155;
+}
 
-    tr {
-    border-bottom: 1px solid #334155;
-    }
+th, td {
+padding: 12px;
+}
 
-    tr:hover {
-    background: #0f172a;
-    }
+tr {
+border-bottom: 1px solid #334155;
+}
 
-    /* HERO CLICKABLE */
-    .hero-name {
-    color: #38bdf8;
-    font-weight: bold;
-    cursor: pointer;
-    }
+tr:hover {
+background: #0f172a;
+}
 
-    .hero-name:hover {
-    text-decoration: underline;
-    }
+/* HERO CLICKABLE */
+.hero-name {
+color: #38bdf8;
+font-weight: bold;
+cursor: pointer;
+}
 
-    /* INPUT TABLE */
-    td input {
-    width: 60px;
-    padding: 6px;
-    border-radius: 6px;
-    border: none;
-    background: #020617;
-    color: white;
-    text-align: center;
-    }
+.hero-name:hover {
+text-decoration: underline;
+}
 
-    /* BUTTON */
-    td button {
-    background: #22c55e;
-    border: none;
-    padding: 6px 10px;
-    border-radius: 8px;
-    color: white;
-    }
+/* INPUT TABLE */
+td input {
+width: 60px;
+padding: 6px;
+border-radius: 6px;
+border: none;
+background: #020617;
+color: white;
+text-align: center;
+}
 
-    /* CHART */
-    .chart-container {
-    margin-top: 30px;
-    height: 300px;
+/* BUTTON */
+td button {
+background: #22c55e;
+border: none;
+padding: 6px 10px;
+border-radius: 8px;
+color: white;
+}
+
+/* CHART */
+.chart-container {
+margin-top: 30px;
+height: 300px;
+background: #1e293b;
+padding: 10px;
+border-radius: 10px;
+}
+
+/* ========================= */
+/* 📱 MOBILE */
+/* ========================= */
+@media (max-width: 600px) {
+.form-row {
+    flex-direction: column;
+}
+
+th, td {
+    font-size: 12px;
+}
+}
+
+/* ========================= */
+/* 📱 TABLET (FIX TAMBAHAN) */
+/* ========================= */
+@media (min-width: 601px) and (max-width: 1023px) {
+
+.container {
+    width: 92%;
+}
+
+h1 {
+    font-size: 32px;
+}
+
+/* FORM */
+.form-row input {
+    padding: 14px;
+    font-size: 14px;
+}
+
+.form-row button {
+    padding: 14px 24px;
+    font-size: 14px;
+}
+
+/* TABLE */
+th, td {
+    padding: 14px;
+    font-size: 14px;
+}
+
+/* CHART */
+.chart-container {
+    height: 350px;
+}
+
+/* INPUT */
+td input {
+    width: 65px;
+}
+
+/* BUTTON */
+td button {
+    padding: 7px 12px;
+}
+}
+
+/* ========================= */
+/* 💻 DESKTOP */
+/* ========================= */
+@media (min-width: 1024px) {
+
+.container {
+    width: 85%;
+}
+
+h1 {
+    font-size: 42px;
+    margin: 30px 0;
+}
+
+.form-row input {
+    padding: 16px;
+    font-size: 16px;
+    border-radius: 14px;
+}
+
+.form-row button {
+    padding: 16px 30px;
+    font-size: 16px;
+    border-radius: 14px;
+}
+
+th, td {
+    padding: 16px;
+    font-size: 15px;
+}
+
+.table-wrapper {
     background: #1e293b;
     padding: 10px;
-    border-radius: 10px;
-    }
+    border-radius: 12px;
+}
 
-    /* MOBILE */
-    @media (max-width: 600px) {
-    .form-row {
-        flex-direction: column;
-    }
+.chart-container {
+    height: 400px;
+    margin-top: 40px;
+    border-radius: 16px;
+}
 
-    th, td {
-        font-size: 12px;
-    }
-    }
+td input {
+    width: 70px;
+    padding: 8px;
+    font-size: 14px;
+}
+
+td button {
+    padding: 8px 14px;
+}
+}
+
+/* ========================= */
+/* 🔥 FIXED FOOTER */
+/* ========================= */
+.footer {
+position: fixed;
+bottom: 0;
+left: 0;
+right: 0;
+
+width: 100%;
+text-align: center;
+
+padding: 15px;
+padding-bottom: calc(15px + env(safe-area-inset-bottom));
+
+background: #020617;
+border-top: 1px solid #1e293b;
+
+color: #94a3b8;
+font-size: 14px;
+
+z-index: 9999;
+
+/* efek kaca */
+backdrop-filter: blur(10px);
+}
+
+/* TEXT */
+.footer span {
+color: #22c55e;
+font-weight: bold;
+}
+
+.footer span:hover {
+color: #4ade80;
+cursor: pointer;
+}
