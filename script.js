@@ -10,20 +10,39 @@ const firebaseConfig = {
 
 // INIT
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+
 const auth = firebase.auth();
+const db = firebase.firestore();
 
 console.log("App started");
 
-// 🔥 PERSISTENCE (WAJIB BIAR LOGIN TERSIMPAN)
+// 🔥 WAIT PERSISTENCE DULU BARU LANJUT
 auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-    .then(() => {
-        console.log("Persistence aktif");
+.then(() => {
+
+    console.log("Persistence ready");
+
+  // 🔥 BARU PASANG LISTENER AUTH
+    auth.onAuthStateChanged(user=>{
+    if(user){
+        console.log("User detected:", user.email);
+
+        userId = user.uid;
+        document.getElementById("userInfo").innerText = user.email;
+
+        loadData();
+
+    } else {
+        console.log("Belum login");
+
+        userId = null;
+        heroes = [];
+        render();
+        document.getElementById("userInfo").innerText = "";
+    }
     });
 
-// ===== DATA =====
-let heroes = [];
-let userId = null;
+});
 
 // 🔥 HANDLE REDIRECT RESULT (FIX LOGIN HP)
 auth.getRedirectResult()
