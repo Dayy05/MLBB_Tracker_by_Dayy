@@ -3,23 +3,38 @@ margin: 0;
 font-family: 'Segoe UI', sans-serif;
 background: #020617;
 color: white;
-
-/* 🔥 biar konten tidak ketutup footer */
 padding-bottom: 80px;
+transition: all 0.3s ease;
+}
+
+.container {
+margin: auto;
+transition: all 0.3s ease;
 }
 
 h1 {
 text-align: center;
-margin: 20px 0;
 color: #22c55e;
+transition: all 0.3s ease;
 }
 
-.container {
-width: 95%;
-margin: auto;
-}
+/* MOBILE */
+.mobile .container { width: 95%; }
+.mobile h1 { font-size: 24px; margin: 15px 0; }
+.mobile .form-row { flex-direction: column; }
+.mobile .chart-container { height: 280px; }
 
-/* FORM */
+/* TABLET */
+.tablet .container { width: 92%; }
+.tablet h1 { font-size: 32px; }
+.tablet .chart-container { height: 350px; }
+
+/* DESKTOP */
+.desktop .container { width: 85%; }
+.desktop h1 { font-size: 42px; margin: 30px 0; }
+.desktop .chart-container { height: 400px; }
+
+/* SHARED */
 .form-row {
 display: flex;
 gap: 10px;
@@ -27,7 +42,7 @@ flex-wrap: wrap;
 margin-bottom: 15px;
 }
 
-.form-row input {
+input {
 flex: 1;
 min-width: 120px;
 padding: 12px;
@@ -37,7 +52,7 @@ background: #1e293b;
 color: white;
 }
 
-.form-row button {
+button {
 padding: 12px 20px;
 border-radius: 10px;
 border: none;
@@ -47,220 +62,46 @@ font-weight: bold;
 cursor: pointer;
 }
 
-/* TABLE */
-.table-wrapper {
-overflow-x: auto;
-}
-
 table {
 width: 100%;
 border-collapse: collapse;
 background: #1e293b;
 }
 
-thead {
-background: #334155;
-}
+thead { background: #334155; }
 
-th, td {
-padding: 12px;
-}
+th, td { padding: 12px; }
 
-tr {
-border-bottom: 1px solid #334155;
-}
-
-tr:hover {
-background: #0f172a;
-}
-
-/* HERO CLICKABLE */
 .hero-name {
 color: #38bdf8;
 font-weight: bold;
 cursor: pointer;
 }
 
-.hero-name:hover {
-text-decoration: underline;
-}
-
-/* INPUT TABLE */
-td input {
-width: 60px;
-padding: 6px;
-border-radius: 6px;
-border: none;
-background: #020617;
-color: white;
-text-align: center;
-}
-
-/* BUTTON */
-td button {
-background: #22c55e;
-border: none;
-padding: 6px 10px;
-border-radius: 8px;
-color: white;
-}
-
-/* CHART */
 .chart-container {
 margin-top: 30px;
-height: 300px;
 background: #1e293b;
 padding: 10px;
 border-radius: 10px;
 }
 
-/* ========================= */
-/* 📱 MOBILE */
-/* ========================= */
-@media (max-width: 600px) {
-.form-row {
-    flex-direction: column;
-}
-
-th, td {
-    font-size: 12px;
-}
-}
-
-/* ========================= */
-/* 📱 TABLET (FIX TAMBAHAN) */
-/* ========================= */
-@media (min-width: 601px) and (max-width: 1023px) {
-
-.container {
-    width: 92%;
-}
-
-h1 {
-    font-size: 32px;
-}
-
-/* FORM */
-.form-row input {
-    padding: 14px;
-    font-size: 14px;
-}
-
-.form-row button {
-    padding: 14px 24px;
-    font-size: 14px;
-}
-
-/* TABLE */
-th, td {
-    padding: 14px;
-    font-size: 14px;
-}
-
-/* CHART */
-.chart-container {
-    height: 350px;
-}
-
-/* INPUT */
-td input {
-    width: 65px;
-}
-
-/* BUTTON */
-td button {
-    padding: 7px 12px;
-}
-}
-
-/* ========================= */
-/* 💻 DESKTOP */
-/* ========================= */
-@media (min-width: 1024px) {
-
-.container {
-    width: 85%;
-}
-
-h1 {
-    font-size: 42px;
-    margin: 30px 0;
-}
-
-.form-row input {
-    padding: 16px;
-    font-size: 16px;
-    border-radius: 14px;
-}
-
-.form-row button {
-    padding: 16px 30px;
-    font-size: 16px;
-    border-radius: 14px;
-}
-
-th, td {
-    padding: 16px;
-    font-size: 15px;
-}
-
-.table-wrapper {
-    background: #1e293b;
-    padding: 10px;
-    border-radius: 12px;
-}
-
-.chart-container {
-    height: 400px;
-    margin-top: 40px;
-    border-radius: 16px;
-}
-
-td input {
-    width: 70px;
-    padding: 8px;
-    font-size: 14px;
-}
-
-td button {
-    padding: 8px 14px;
-}
-}
-
-/* ========================= */
-/* 🔥 FIXED FOOTER */
-/* ========================= */
+/* FOOTER */
 .footer {
 position: fixed;
 bottom: 0;
 left: 0;
 right: 0;
-
-width: 100%;
 text-align: center;
-
 padding: 15px;
 padding-bottom: calc(15px + env(safe-area-inset-bottom));
-
-background: #020617;
+background: rgba(2,6,23,0.8);
 border-top: 1px solid #1e293b;
-
 color: #94a3b8;
-font-size: 14px;
-
 z-index: 9999;
-
-/* efek kaca */
 backdrop-filter: blur(10px);
 }
 
-/* TEXT */
 .footer span {
 color: #22c55e;
 font-weight: bold;
-}
-
-.footer span:hover {
-color: #4ade80;
-cursor: pointer;
 }
