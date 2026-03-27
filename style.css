@@ -16,6 +16,7 @@ h1 {
     font-size: 22px;
     background: linear-gradient(90deg,#38bdf8,#22c55e);
     -webkit-background-clip: text;
+    background-clip: text;
     color: transparent;
 }
 
@@ -62,10 +63,6 @@ table {
 th, td {
     padding: 8px;
     text-align: center;
-}
-
-th {
-    
 }
 
 input.table-input {

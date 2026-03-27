@@ -1,3 +1,16 @@
+const firebaseConfig = {
+    apiKey: "AIzaSyCB4_G4di66IvL_2wcR6krQbP9vseutXuo",
+    authDomain: "mlbb-wr-tracker-by-dayy.firebaseapp.com",
+    projectId: "mlbb-wr-tracker-by-dayy",
+    storageBucket: "mlbb-wr-tracker-by-dayy.firebasestorage.app",
+    messagingSenderId: "570200071305",
+    appId: "1:570200071305:web:47b0c9fd12780cfff33a58"
+};
+
+// INIT FIREBASE
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
 let heroes = [];
 let chart;
 
