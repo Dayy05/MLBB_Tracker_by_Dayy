@@ -16,10 +16,30 @@ const auth = firebase.auth();
 let heroes = [];
 let userId = null;
 
-// LOGIN
+// 🔥 HANDLE REDIRECT RESULT (WAJIB UNTUK HP)
+auth.getRedirectResult()
+    .then((result) => {
+    if (result.user) {
+        console.log("Login sukses:", result.user.email);
+    }
+    })
+    .catch((error) => {
+    console.error("Login error:", error);
+    });
+
+// 🔥 AUTO DETECT DEVICE LOGIN
 function login(){
     const provider = new firebase.auth.GoogleAuthProvider();
+
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    if(isMobile){
+    // HP → pakai redirect
+    auth.signInWithRedirect(provider);
+    } else {
+    // PC → pakai popup
     auth.signInWithPopup(provider);
+    }
 }
 
 // LOGOUT
@@ -43,28 +63,28 @@ auth.onAuthStateChanged(user=>{
 
 // HITUNG
 function hitung(h){
-    let match=h.matchAwal+h.win+h.lose;
-    let winTotal=(h.matchAwal*h.wrAwal)+h.win;
-    let wr=winTotal/match;
+    let match = h.matchAwal + h.win + h.lose;
+    let winTotal = (h.matchAwal * h.wrAwal) + h.win;
+    let wr = winTotal / match;
 
-    let sisa=Math.max(0,Math.ceil(
-    (h.wrTarget*match-winTotal)/(1-h.wrTarget)
+    let sisa = Math.max(0, Math.ceil(
+    (h.wrTarget * match - winTotal) / (1 - h.wrTarget)
     ));
 
-    return {match,wr,sisa};
+    return {match, wr, sisa};
 }
 
 // TAMBAH HERO
 function tambahHero(){
     if(!userId) return alert("Login dulu!");
 
-    let h={
-    hero:hero.value,
-    matchAwal:+matchAwal.value,
-    wrAwal:+wrAwal.value/100,
-    wrTarget:+wrTarget.value/100,
-    win:0,
-    lose:0
+    let h = {
+    hero: hero.value,
+    matchAwal: +matchAwal.value,
+    wrAwal: +wrAwal.value / 100,
+    wrTarget: +wrTarget.value / 100,
+    win: 0,
+    lose: 0
     };
 
     heroes.push(h);
@@ -76,7 +96,7 @@ function saveData(){
     if(!userId) return;
 
     db.collection("users").doc(userId).set({
-    heroes:heroes
+    heroes: heroes
     });
 }
 
@@ -94,13 +114,13 @@ function loadData(){
 
 // RENDER
 function render(){
-    let tbody=document.getElementById("tableBody");
-    tbody.innerHTML="";
+    let tbody = document.getElementById("tableBody");
+    tbody.innerHTML = "";
 
     heroes.forEach((h,i)=>{
-    let r=hitung(h);
+    let r = hitung(h);
 
-    tbody.innerHTML+=`
+    tbody.innerHTML += `
     <tr>
         <td>${h.hero}</td>
         <td>${r.match}</td>
@@ -116,12 +136,12 @@ function render(){
 
 // UPDATE
 function updateWin(i,val){
-    heroes[i].win=parseInt(val)||0;
+    heroes[i].win = parseInt(val) || 0;
     saveData();
 }
 
 function updateLose(i,val){
-    heroes[i].lose=parseInt(val)||0;
+    heroes[i].lose = parseInt(val) || 0;
     saveData();
 }
 
