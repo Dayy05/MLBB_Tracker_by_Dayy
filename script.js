@@ -13,48 +13,32 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const auth = firebase.auth();
 
+console.log("App started");
+
+// 🔥 PERSISTENCE (WAJIB BIAR LOGIN TERSIMPAN)
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+    .then(() => {
+        console.log("Persistence aktif");
+    });
+
+// ===== DATA =====
 let heroes = [];
 let userId = null;
 
-// LIST HERO MLBB
-const heroListData = [
-"Aamon", "Akai", "Aldous", "Alice", "Alpha", "Alucard", "Angela", 
-"Argus", "Arlott", "Atlas", "Aulus", "Aurora", "Badang", "Balmond", 
-"Bane", "Barats", "Baxia", "Beatrix", "Belerick", "Benedetta", "Brody", 
-"Carmilla", "Cecilion", "Chang’e", "Chip", "Chou", "Cici", "Clint", "Claude", 
-"Cyclops", "Diggie", "Dyrroth", "Edith", "Esmeralda", "Estes", "Eudora", "Fanny", 
-"Faramis", "Floryn", "Franco", "Fredrinn", "Freya", "Gatotkaca", "Gloo", "Gord", 
-"Grock", "Granger", "Gusion", "Guinevere", "Hanabi", "Hanzo", "Harley", "Harith", 
-"Hayabusa", "Helcurt", "Hilda", "Hylos", "Irithel", "Ixia", "Jawhead", "Johnson", 
-"Joy", "Julian", "Kadita", "Kagura", "Kaja", "Kalea", "Karina", "Karrie", "Khaleed", 
-"Khufra", "Kimmy", "Lancelot", "Lapu-Lapu", "Lesley", "Leomord", "Ling", "Lolita", 
-"Luo Yi", "Lukas", "Lunox", "Lylia", "Marcel", "Martis", "Masha", "Mathilda", "Melissa", 
-"Minotaur", "Miya", "Moskov", "Nana", "Natan", "Natalia", "Nolan", "Novaria", "Obsidia", 
-"Odette", "Paquito", "Pharsa", "Phoveus", "Popol and Kupa", "Rafaela", "Roger", "Ruby", 
-"Saber", "Selena", "Silvanna", "Sora", "Sun", "Suyou", "Terizla", "Thamuz", "Tigreal", 
-"Uranus", "Valentina", "Vale", "Valir", "Vexana", "Wanwan", "Xavier", "X.Borg", 
-"Yi Sun-shin", "Yin", "Yve", "Yu Zhong", "Zhask", "Zhuxin", "Zilong", "Zetian"
-
-];
-
-// LOAD KE DATALIST
-const heroList = document.getElementById("heroList");
-
-heroListData.forEach(hero=>{
-    const option = document.createElement("option");
-    option.value = hero;
-    heroList.appendChild(option);
-});
-
-// 🔥 HANDLE REDIRECT RESULT (WAJIB UNTUK HP)
+// 🔥 HANDLE REDIRECT RESULT (FIX LOGIN HP)
 auth.getRedirectResult()
     .then((result) => {
     if (result.user) {
-        console.log("Login sukses:", result.user.email);
+        console.log("Redirect login:", result.user.email);
+
+        userId = result.user.uid;
+        document.getElementById("userInfo").innerText = result.user.email;
+
+        loadData();
     }
     })
     .catch((error) => {
-    console.error("Login error:", error);
+    console.error("Redirect error:", error);
     });
 
 // 🔥 AUTO DETECT DEVICE LOGIN
@@ -64,12 +48,10 @@ function login(){
     const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
     if(isMobile){
-    // HP → pakai redirect
     auth.signInWithRedirect(provider);
     } else {
-    // PC → pakai popup
     auth.signInWithPopup(provider);
-    }
+    } 
 }
 
 // LOGOUT
@@ -77,13 +59,22 @@ function logout(){
     auth.signOut();
 }
 
-// DETECT USER
+// 🔥 FIX DETECT USER (LEBIH STABIL)
 auth.onAuthStateChanged(user=>{
     if(user){
+    console.log("User detected:", user.email);
+
     userId = user.uid;
     document.getElementById("userInfo").innerText = user.email;
-    loadData();
+
+    // Delay kecil biar Firestore siap
+    setTimeout(()=>{
+        loadData();
+    }, 300);
+
     } else {
+    console.log("User belum login");
+
     userId = null;
     heroes = [];
     render();
@@ -91,10 +82,10 @@ auth.onAuthStateChanged(user=>{
     }
 });
 
-// HITUNG
+// ===== HITUNG =====
 function hitung(h){
     let match = h.matchAwal + h.win + h.lose;
-    let winTotal = (h.matchAwal * h.wrAwal) + h.win;
+  let winTotal = (h.matchAwal * h.wrAwal) + h.win;
     let wr = winTotal / match;
 
     let sisa = Math.max(0, Math.ceil(
@@ -104,7 +95,7 @@ function hitung(h){
     return {match, wr, sisa};
 }
 
-// TAMBAH HERO
+// ===== TAMBAH HERO =====
 function tambahHero(){
     if(!userId) return alert("Login dulu!");
 
@@ -121,7 +112,7 @@ function tambahHero(){
     saveData();
 }
 
-// SAVE
+// ===== SAVE =====
 function saveData(){
     if(!userId) return;
 
@@ -130,7 +121,7 @@ function saveData(){
     });
 }
 
-// REALTIME LOAD
+// ===== REALTIME LOAD =====
 function loadData(){
     db.collection("users")
     .doc(userId)
@@ -138,11 +129,11 @@ function loadData(){
         if(doc.exists){
         heroes = doc.data().heroes;
         render();
-        }
+        } 
     });
 }
 
-// RENDER
+// ===== RENDER =====
 function render(){
     let tbody = document.getElementById("tableBody");
     tbody.innerHTML = "";
@@ -160,11 +151,11 @@ function render(){
         <td><input type="number" value="${h.lose}" onchange="updateLose(${i},this.value)"></td>
         <td>${r.sisa}</td>
         <td><button onclick="hapus(${i})">X</button></td>
-    </tr>`;
+        </tr>`;
     });
 }
 
-// UPDATE
+// ===== UPDATE =====
 function updateWin(i,val){
     heroes[i].win = parseInt(val) || 0;
     saveData();
@@ -175,8 +166,8 @@ function updateLose(i,val){
     saveData();
 }
 
-// HAPUS
+// ===== HAPUS =====
 function hapus(i){
     heroes.splice(i,1);
     saveData();
-}
+    }
