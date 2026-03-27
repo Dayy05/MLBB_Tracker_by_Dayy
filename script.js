@@ -42,7 +42,7 @@ function hitung(h){
     return {match, wr, sisa};
 }
 
-// 🔥 TAMBAH / REPLACE HERO
+// TAMBAH HERO
 function tambahHero(){
     let heroName = hero.value.trim();
     if(!heroName) return;
@@ -84,18 +84,26 @@ function rebuildHistory(i){
     for(let x=0; x<h.lose; x++) h.history.push("L");
 }
 
-// UPDATE WIN
+// UPDATE WIN (REALTIME + SMOOTH)
 function updateWin(i,val){
     heroes[i].win = parseInt(val) || 0;
     rebuildHistory(i);
     saveData();
+
+    if(selectedHeroIndex === i){
+        setTimeout(()=> renderChart(i), 50);
+    }
 }
 
-// UPDATE LOSE
+// UPDATE LOSE (REALTIME + SMOOTH)
 function updateLose(i,val){
     heroes[i].lose = parseInt(val) || 0;
     rebuildHistory(i);
     saveData();
+
+    if(selectedHeroIndex === i){
+        setTimeout(()=> renderChart(i), 50);
+    }
 }
 
 // SAVE
@@ -121,7 +129,7 @@ function generateWRHistory(h){
     return data;
 }
 
-// CHART
+// CHART (🔥 SMOOTH UPDATE)
 function renderChart(index){
     if(!heroes[index]) return;
 
@@ -129,44 +137,64 @@ function renderChart(index){
 
     let data = generateWRHistory(heroes[index]);
 
-    if(chart) chart.destroy();
+    // 🔥 FIRST TIME CREATE
+    if(!chart){
+        chart = new Chart(document.getElementById("chartWR"), {
+            type: "line",
+            data: {
+                labels: data.map((_,i)=>i),
+                datasets: [{
+                    label: "WR (%)",
+                    data: data,
+                    borderWidth: 3,
+                    tension: 0.4,
+                    segment: {
+                        borderColor: ctx => {
+                            let i = ctx.p0DataIndex;
+                            let current = data[i];
+                            let next = data[i+1];
 
-    chart = new Chart(document.getElementById("chartWR"), {
-        type: "line",
-        data: {
-            labels: data.map((_,i)=>i),
-            datasets: [{
-                label: "WR (%)",
-                data: data,
-                borderWidth: 3,
-                tension: 0.3,
-                segment: {
-                    borderColor: ctx => {
-                        let i = ctx.p0DataIndex;
-                        let current = data[i];
-                        let next = data[i+1];
-
-                        if(next === undefined) return "#22c55e";
-                        return next >= current ? "#22c55e" : "#ef4444";
+                            if(next === undefined) return "#22c55e";
+                            return next >= current ? "#22c55e" : "#ef4444";
+                        }
                     }
-                }
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { labels: { color: "white" } }
+                }]
             },
-            scales: {
-                x: { ticks: { color: "white" } },
-                y: { ticks: { color: "white" } }
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+
+                // 🔥 SMOOTH ANIMATION
+                animation: {
+                    duration: 600,
+                    easing: 'easeOutQuart'
+                },
+
+                interaction: {
+                    mode: 'nearest',
+                    intersect: false
+                },
+
+                plugins: {
+                    legend: { labels: { color: "white" } }
+                },
+                scales: {
+                    x: { ticks: { color: "white" } },
+                    y: { ticks: { color: "white" } }
+                }
             }
-        }
-    });
+        });
+    } 
+    // 🔥 UPDATE DATA (NO DESTROY = SMOOTH)
+    else {
+        chart.data.labels = data.map((_,i)=>i);
+        chart.data.datasets[0].data = data;
+
+        chart.update();
+    }
 }
 
-// RENDER
+// RENDER TABLE
 function render(){
     let tbody = document.getElementById("tableBody");
     tbody.innerHTML = "";
@@ -193,4 +221,12 @@ function hapus(i){
     heroes.splice(i,1);
     saveData();
     showNotif("Hero dihapus!", "delete");
+
+    if(selectedHeroIndex === i){
+        if(chart){
+            chart.destroy();
+            chart = null;
+        }
+        selectedHeroIndex = null;
+    }
 }
