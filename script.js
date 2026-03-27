@@ -16,15 +16,30 @@ const db = firebase.firestore();
 
 console.log("App started");
 
-// 🔥 WAIT PERSISTENCE DULU BARU LANJUT
+// ===== DATA =====
+let heroes = [];
+let userId = null;
+
+// 🔥 PERSISTENCE + AUTH READY
 auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
 .then(() => {
 
     console.log("Persistence ready");
 
-  // 🔥 BARU PASANG LISTENER AUTH
+  // 🔥 HANDLE REDIRECT (LOGIN HP)
+    auth.getRedirectResult()
+        .then((result) => {
+        if (result.user) {
+            console.log("Redirect login:", result.user.email);
+        }
+        })
+        .catch((error) => {
+        console.error("Redirect error:", error);
+        });
+
+    // 🔥 AUTH STATE (PALING PENTING)
     auth.onAuthStateChanged(user=>{
-    if(user){
+        if(user){
         console.log("User detected:", user.email);
 
         userId = user.uid;
@@ -32,45 +47,28 @@ auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
 
         loadData();
 
-    } else {
+        } else {
         console.log("Belum login");
 
         userId = null;
         heroes = [];
         render();
         document.getElementById("userInfo").innerText = "";
-    }
+        }
     });
 
 });
 
-// 🔥 HANDLE REDIRECT RESULT (FIX LOGIN HP)
-auth.getRedirectResult()
-    .then((result) => {
-    if (result.user) {
-        console.log("Redirect login:", result.user.email);
-
-        userId = result.user.uid;
-        document.getElementById("userInfo").innerText = result.user.email;
-
-        loadData();
-    }
-    })
-    .catch((error) => {
-    console.error("Redirect error:", error);
-    });
-
-// 🔥 AUTO DETECT DEVICE LOGIN
+// 🔥 LOGIN AUTO DEVICE
 function login(){
     const provider = new firebase.auth.GoogleAuthProvider();
-
     const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
     if(isMobile){
-    auth.signInWithRedirect(provider);
+        auth.signInWithRedirect(provider);
     } else {
-    auth.signInWithPopup(provider);
-    } 
+        auth.signInWithPopup(provider);
+    }
 }
 
 // LOGOUT
@@ -78,37 +76,14 @@ function logout(){
     auth.signOut();
 }
 
-// 🔥 FIX DETECT USER (LEBIH STABIL)
-auth.onAuthStateChanged(user=>{
-    if(user){
-    console.log("User detected:", user.email);
-
-    userId = user.uid;
-    document.getElementById("userInfo").innerText = user.email;
-
-    // Delay kecil biar Firestore siap
-    setTimeout(()=>{
-        loadData();
-    }, 300);
-
-    } else {
-    console.log("User belum login");
-
-    userId = null;
-    heroes = [];
-    render();
-    document.getElementById("userInfo").innerText = "";
-    }
-});
-
 // ===== HITUNG =====
 function hitung(h){
     let match = h.matchAwal + h.win + h.lose;
-  let winTotal = (h.matchAwal * h.wrAwal) + h.win;
+    let winTotal = (h.matchAwal * h.wrAwal) + h.win;
     let wr = winTotal / match;
 
     let sisa = Math.max(0, Math.ceil(
-    (h.wrTarget * match - winTotal) / (1 - h.wrTarget)
+        (h.wrTarget * match - winTotal) / (1 - h.wrTarget)
     ));
 
     return {match, wr, sisa};
@@ -116,7 +91,14 @@ function hitung(h){
 
 // ===== TAMBAH HERO =====
 function tambahHero(){
-    if(!userId) return alert("Login dulu!");
+
+  // 🔥 FIX LOGIN CHECK
+    if(!auth.currentUser){
+        alert("Tunggu login selesai...");
+        return;
+    }
+
+    userId = auth.currentUser.uid;
 
     let h = {
     hero: hero.value,
@@ -136,19 +118,21 @@ function saveData(){
     if(!userId) return;
 
     db.collection("users").doc(userId).set({
-    heroes: heroes
+        heroes: heroes
     });
 }
 
 // ===== REALTIME LOAD =====
 function loadData(){
+    if(!userId) return;
+
     db.collection("users")
     .doc(userId)
     .onSnapshot(doc=>{
         if(doc.exists){
         heroes = doc.data().heroes;
         render();
-        } 
+        }
     });
 }
 
@@ -170,7 +154,7 @@ function render(){
         <td><input type="number" value="${h.lose}" onchange="updateLose(${i},this.value)"></td>
         <td>${r.sisa}</td>
         <td><button onclick="hapus(${i})">X</button></td>
-        </tr>`;
+    </tr>`;
     });
 }
 
@@ -189,4 +173,4 @@ function updateLose(i,val){
 function hapus(i){
     heroes.splice(i,1);
     saveData();
-    }
+}
