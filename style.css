@@ -48,7 +48,7 @@ cursor: pointer;
 }
 
 /* ========================= */
-/* 🔥 TABLE SCROLL FIX */
+/* 🔥 SCROLL FIX */
 /* ========================= */
 .table-wrapper {
 overflow-x: auto;
@@ -71,8 +71,8 @@ width: 100%;
 border-collapse: collapse;
 background: #1e293b;
 
-/* 🔥 FIX: enable horizontal + vertical scroll */
-touch-action: auto;
+/* 🔥 WAJIB untuk HP */
+touch-action: pan-x pan-y;
 }
 
 th, td {
@@ -138,14 +138,8 @@ th, td {
     font-size: 12px;
 }
 
-/* max 5 hero */
 .table-wrapper {
     max-height: 260px;
-}
-
-/* 🔥 PENTING: jangan lock scroll */
-table {
-    touch-action: auto;
 }
 
 .chart-container {

@@ -18,9 +18,33 @@ function showNotif(text, type="success"){
     }, 2000);
 }
 
-// HERO LIST (BIARIN PUNYA KAMU)
+// HERO LIST (FULL)
 const heroListData = [
-"Aamon","Akai","Aldous","Alice","Alpha","Alucard","Angela","Argus","Arlott","Atlas","Aulus","Aurora"
+"Aamon","Akai","Aldous","Alice","Alpha","Alucard","Angela","Argus","Arlott","Atlas","Aulus","Aurora",
+"Badang","Balmond","Bane","Barats","Baxia","Beatrix","Belerick","Benedetta","Brody","Bruno",
+"Carmilla","Cecilion","Chang'e","Chip","Chou","Cici","Clint","Claude","Cyclops",
+"Diggie","Dyrroth",
+"Edith","Esmeralda","Estes","Eudora",
+"Fanny","Faramis","Floryn","Franco","Fredrinn","Freya",
+"Gatotkaca","Gloo","Gord","Grock","Granger","Gusion","Guinevere",
+"Hanabi","Hanzo","Harley","Harith","Hayabusa","Helcurt","Hilda","Hylos",
+"Irithel","Ixia",
+"Jawhead","Johnson","Joy","Julian",
+"Kadita","Kagura","Kaja","Kalea","Karina","Karrie","Khaleed","Khufra","Kimmy",
+"Lancelot","Lapu-Lapu","Layla","Lesley","Leomord","Ling","Lolita","Luo Yi","Lukas","Lunox","Lylia",
+"Marcel","Martis","Masha","Mathilda","Melissa","Minotaur","Miya","Moskov",
+"Nana","Natan","Natalia","Nolan","Novaria",
+"Obsidia","Odette",
+"Paquito","Pharsa","Phoveus","Popol & Kupa",
+"Rafaela","Roger","Ruby",
+"Saber","Selena","Silvanna","Sora","Sun","Suyou",
+"Terizla","Thamuz","Tigreal",
+"Uranus",
+"Valentina","Vale","Valir","Vexana",
+"Wanwan",
+"Xavier","X.Borg",
+"Yi Sun-shin","Yin","Yve","Yu Zhong",
+"Zetian","Zhask","Zhuxin","Zilong"
 ];
 
 window.onload = () => {
@@ -206,14 +230,14 @@ function render(){
 
         const heroCell = row.querySelector(".hero-name");
 
-        // 🔥 FIX: PC + HP CLICK
+        // CLICK
         heroCell.addEventListener("click", ()=>{
             if(!isTouchDragging){
                 renderChart(i);
             }
         });
 
-        // 🔥 HOLD DRAG HP
+        // HOLD DRAG HP
         heroCell.addEventListener("touchstart", ()=>{
             longPressTimer = setTimeout(()=>{
                 touchDragIndex = i;
@@ -222,12 +246,15 @@ function render(){
             }, 200);
         });
 
+        // 🔥 FIX TOUCHMOVE
         heroCell.addEventListener("touchmove", (e)=>{
             if(!isTouchDragging) return;
 
+            const touch = e.touches[0];
+            if(!touch) return;
+
             e.preventDefault();
 
-            const touch = e.touches[0];
             const el = document.elementFromPoint(touch.clientX, touch.clientY);
             if(!el) return;
 
@@ -250,12 +277,13 @@ function render(){
 
             if(isTouchDragging){
                 saveData();
+                showNotif("Urutan hero diperbarui!", "update"); // 🔥 notif reorder
             }
 
             isTouchDragging = false;
         });
 
-        // 🔥 DRAG PC
+        // DRAG PC
         row.addEventListener("dragstart", ()=>{
             dragIndex = i;
         });
@@ -271,6 +299,7 @@ function render(){
             heroes.splice(dropIndex,0,moved);
 
             saveData();
+            showNotif("Urutan hero diperbarui!", "update"); // 🔥 notif PC
         });
 
         tbody.appendChild(row);
@@ -281,6 +310,8 @@ function render(){
 function hapus(i){
     heroes.splice(i,1);
     saveData();
+
+    showNotif("Hero dihapus!", "delete"); // 🔥 notif delete
 
     if(selectedHeroIndex === i){
         chart?.destroy();
