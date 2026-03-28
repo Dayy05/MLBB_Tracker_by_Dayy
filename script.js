@@ -15,7 +15,31 @@ function showNotif(text, type="success"){
 }
 
 // HERO LIST
-const heroListData = ["Aamon","Akai","Aldous","Alice","Alpha","Alucard","Angela","Argus","Arlott","Atlas","Aulus","Aurora","Badang","Balmond","Bane","Barats","Baxia","Beatrix","Belerick","Benedetta","Brody","Carmilla","Cecilion","Chang’e","Chip","Chou","Cici","Clint","Claude","Cyclops","Diggie","Dyrroth","Edith","Esmeralda","Estes","Eudora","Fanny","Faramis","Floryn","Franco","Fredrinn","Freya","Gatotkaca","Gloo","Gord","Grock","Granger","Gusion","Guinevere","Hanabi","Hanzo","Harley","Harith","Hayabusa","Helcurt","Hilda","Hylos","Irithel","Ixia","Jawhead","Johnson","Joy","Julian","Kadita","Kagura","Kaja","Kalea","Karina","Karrie","Khaleed","Khufra","Kimmy","Lancelot","Lapu-Lapu","Lesley","Leomord","Ling","Lolita","Luo Yi","Lukas","Lunox","Lylia","Marcel","Martis","Masha","Mathilda","Melissa","Minotaur","Miya","Moskov","Nana","Natan","Natalia","Nolan","Novaria","Obsidia","Odette","Paquito","Pharsa","Phoveus","Popol and Kupa","Rafaela","Roger","Ruby","Saber","Selena","Silvanna","Sora","Sun","Suyou","Terizla","Thamuz","Tigreal","Uranus","Valentina","Vale","Valir","Vexana","Wanwan","Xavier","X.Borg","Yi Sun-shin","Yin","Yve","Yu Zhong","Zhask","Zhuxin","Zilong","Zetian"];
+const heroListData = [("Aamon"), ("Akai"), ("Aldous"), ("Alice"), ("Alpha"), ("Alucard"), ("Angela"), ("Argus"), ("Arlott"), ("Atlas"), ("Aulus"), ("Aurora"),
+("Badang"), ("Balmond"), ("Bane"), ("Barats"), ("Baxia"), ("Beatrix"), ("Belerick"), ("Benedetta"), ("Brody"), ("Bruno"),
+("Carmilla"), ("Cecilion"), ("Chang'e"), ("Chip"), ("Chou"), ("Cici"), ("Clint"), ("Claude"), ("Cyclops"),
+("Diggie"), ("Dyrroth"),
+("Edith"), ("Esmeralda"), ("Estes"), ("Eudora"),
+("Fanny"), ("Faramis"), ("Floryn"), ("Franco"), ("Fredrinn"), ("Freya"),
+("Gatotkaca"), ("Gloo"), ("Gord"), ("Grock"), ("Granger"), ("Gusion"), ("Guinevere"),
+("Hanabi"), ("Hanzo"), ("Harley"), ("Harith"), ("Hayabusa"), ("Helcurt"), ("Hilda"), ("Hylos"),
+("Irithel"), ("Ixia"),
+("Jawhead"), ("Johnson"), ("Joy"), ("Julian"),
+("Kadita"), ("Kagura"), ("Kaja"), ("Kalea"), ("Karina"), ("Karrie"), ("Khaleed"), ("Khufra"), ("Kimmy"),
+("Lancelot"), ("Lapu-Lapu"), ("Layla"), ("Lesley"), ("Leomord"), ("Ling"), ("Lolita"), ("Luo Yi"), ("Lukas"), ("Lunox"), ("Lylia"),
+("Marcel"), ("Martis"), ("Masha"), ("Mathilda"), ("Melissa"), ("Minotaur"), ("Miya"), ("Moskov"),
+("Nana"), ("Natan"), ("Natalia"), ("Nolan"), ("Novaria"),
+("Obsidia"), ("Odette"),
+("Paquito"), ("Pharsa"), ("Phoveus"), ("Popol & Kupa"),
+("Rafaela"), ("Roger"), ("Ruby"),
+("Saber"), ("Selena"), ("Silvanna"), ("Sora"), ("Sun"), ("Suyou"),
+("Terizla"), ("Thamuz"), ("Tigreal"),
+("Uranus"),
+("Valentina"), ("Vale"), ("Valir"), ("Vexana"),
+("Wanwan"),
+("Xavier"), ("X.Borg"),
+("Yi Sun-shin"), ("Yin"), ("Yve"), ("Yu Zhong"),
+("Zetian"), ("Zhask"), ("Zhuxin"), ("Zilong")];
 
 window.onload = () => {
     const list = document.getElementById("heroList");
