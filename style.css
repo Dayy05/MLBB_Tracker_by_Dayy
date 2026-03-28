@@ -48,7 +48,7 @@ cursor: pointer;
 }
 
 /* ========================= */
-/* 🔥 TABLE SCROLL (MAX 5 HERO) */
+/* 🔥 TABLE SCROLL FIX */
 /* ========================= */
 .table-wrapper {
 overflow-x: auto;
@@ -70,6 +70,9 @@ table {
 width: 100%;
 border-collapse: collapse;
 background: #1e293b;
+
+/* 🔥 FIX: enable horizontal + vertical scroll */
+touch-action: auto;
 }
 
 th, td {
@@ -135,14 +138,14 @@ th, td {
     font-size: 12px;
 }
 
-/* max 5 hero di HP */
+/* max 5 hero */
 .table-wrapper {
     max-height: 260px;
 }
 
-/* scroll only vertical biar drag aman */
+/* 🔥 PENTING: jangan lock scroll */
 table {
-    touch-action: pan-y;
+    touch-action: auto;
 }
 
 .chart-container {
