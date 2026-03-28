@@ -47,20 +47,31 @@ font-weight: bold;
 cursor: pointer;
 }
 
-/* TABLE */
+/* ========================= */
+/* 🔥 TABLE SCROLL FIX */
+/* ========================= */
 .table-wrapper {
 overflow-x: auto;
+overflow-y: auto;
+
+/* maksimal tampil ~5 row */
+max-height: 280px;
+
 border-radius: 12px;
+}
+
+/* biar header tetap keliatan */
+thead th {
+position: sticky;
+top: 0;
+background: #334155;
+z-index: 2;
 }
 
 table {
 width: 100%;
 border-collapse: collapse;
 background: #1e293b;
-}
-
-thead {
-background: #334155;
 }
 
 th, td {
@@ -126,6 +137,11 @@ th, td {
     font-size: 12px;
 }
 
+/* sedikit lebih kecil biar pas 5 row di HP */
+.table-wrapper {
+    max-height: 240px;
+}
+
 .chart-container {
     height: 250px;
 }
@@ -153,6 +169,11 @@ h1 {
 
 th, td {
     padding: 16px;
+}
+
+/* lebih lega di desktop */
+.table-wrapper {
+    max-height: 320px;
 }
 
 .chart-container {

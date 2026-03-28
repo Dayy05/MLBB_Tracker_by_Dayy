@@ -108,7 +108,7 @@ function rebuildHistory(i){
     for(let x=0; x<h.lose; x++) h.history.push("L");
 }
 
-// UPDATE WIN (REALTIME + SMOOTH)
+// UPDATE WIN
 function updateWin(i,val){
     heroes[i].win = parseInt(val) || 0;
     rebuildHistory(i);
@@ -119,7 +119,7 @@ function updateWin(i,val){
     }
 }
 
-// UPDATE LOSE (REALTIME + SMOOTH)
+// UPDATE LOSE
 function updateLose(i,val){
     heroes[i].lose = parseInt(val) || 0;
     rebuildHistory(i);
@@ -153,7 +153,7 @@ function generateWRHistory(h){
     return data;
 }
 
-// CHART (🔥 SMOOTH UPDATE)
+// CHART
 function renderChart(index){
     if(!heroes[index]) return;
 
@@ -161,7 +161,6 @@ function renderChart(index){
 
     let data = generateWRHistory(heroes[index]);
 
-    // 🔥 FIRST TIME CREATE
     if(!chart){
         chart = new Chart(document.getElementById("chartWR"), {
             type: "line",
@@ -177,7 +176,6 @@ function renderChart(index){
                             let i = ctx.p0DataIndex;
                             let current = data[i];
                             let next = data[i+1];
-
                             if(next === undefined) return "#22c55e";
                             return next >= current ? "#22c55e" : "#ef4444";
                         }
@@ -187,18 +185,14 @@ function renderChart(index){
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-
-                // 🔥 SMOOTH ANIMATION
                 animation: {
                     duration: 600,
                     easing: 'easeOutQuart'
                 },
-
                 interaction: {
                     mode: 'nearest',
                     intersect: false
                 },
-
                 plugins: {
                     legend: { labels: { color: "white" } }
                 },
@@ -208,14 +202,41 @@ function renderChart(index){
                 }
             }
         });
-    } 
-    // 🔥 UPDATE DATA (NO DESTROY = SMOOTH)
-    else {
+    } else {
         chart.data.labels = data.map((_,i)=>i);
         chart.data.datasets[0].data = data;
-
         chart.update();
     }
+}
+
+// 🔥 DRAG & REORDER
+let dragIndex = null;
+
+function handleDragStart(e){
+    dragIndex = +this.dataset.index;
+    this.style.opacity = "0.5";
+}
+
+function handleDragEnd(e){
+    this.style.opacity = "1";
+}
+
+function handleDragOver(e){
+    e.preventDefault();
+}
+
+function handleDrop(e){
+    e.preventDefault();
+
+    let dropIndex = +this.dataset.index;
+
+    if(dragIndex === dropIndex) return;
+
+    let moved = heroes.splice(dragIndex,1)[0];
+    heroes.splice(dropIndex,0,moved);
+
+    saveData();
+    showNotif("Urutan hero diperbarui!", "update");
 }
 
 // RENDER TABLE
@@ -226,8 +247,11 @@ function render(){
     heroes.forEach((h,i)=>{
         let r = hitung(h);
 
-        tbody.innerHTML += `
-        <tr>
+        let row = document.createElement("tr");
+        row.setAttribute("draggable", true);
+        row.dataset.index = i;
+
+        row.innerHTML = `
         <td class="hero-name" onclick="renderChart(${i})">${h.hero}</td>
         <td>${r.match}</td>
         <td>${(r.wr*100).toFixed(1)}%</td>
@@ -236,7 +260,15 @@ function render(){
         <td><input type="number" value="${h.lose}" onchange="updateLose(${i},this.value)"></td>
         <td>${r.sisa}</td>
         <td><button onclick="hapus(${i})">X</button></td>
-        </tr>`;
+        `;
+
+        // attach drag events
+        row.addEventListener("dragstart", handleDragStart);
+        row.addEventListener("dragend", handleDragEnd);
+        row.addEventListener("dragover", handleDragOver);
+        row.addEventListener("drop", handleDrop);
+
+        tbody.appendChild(row);
     });
 }
 
