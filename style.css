@@ -48,14 +48,14 @@ cursor: pointer;
 }
 
 /* ========================= */
-/* 🔥 TABLE SCROLL FIX */
+/* 🔥 TABLE SCROLL (MAX 5 HERO) */
 /* ========================= */
 .table-wrapper {
 overflow-x: auto;
 overflow-y: auto;
-max-height: 280px;
+max-height: 300px;
 border-radius: 12px;
--webkit-overflow-scrolling: touch; /* penting buat HP */
+-webkit-overflow-scrolling: touch;
 }
 
 /* sticky header */
@@ -135,12 +135,12 @@ th, td {
     font-size: 12px;
 }
 
-/* 🔥 FIX 5 HERO DI HP */
+/* max 5 hero di HP */
 .table-wrapper {
     max-height: 260px;
 }
 
-/* biar drag tidak bentrok scroll */
+/* scroll only vertical biar drag aman */
 table {
     touch-action: pan-y;
 }
@@ -183,13 +183,13 @@ th, td {
 }
 }
 
-/* 🔥 DRAG EFFECT */
+/* DRAG EFFECT */
 tr.dragging {
 opacity: 0.5;
 background: #1e293b;
 }
 
-/* 🔥 FOOTER */
+/* FOOTER */
 .footer {
 position: fixed;
 bottom: 0;
