@@ -2,10 +2,12 @@ let heroes = JSON.parse(localStorage.getItem("heroes")) || [];
 let chart;
 let selectedHeroIndex = null;
 
-// 🔥 NOTIF FUNCTION
+// 🔥 TOUCH DRAG
+let touchDragIndex = null;
+
+// 🔥 NOTIF
 function showNotif(text, type="success"){
     const notif = document.getElementById("notif");
-
     notif.innerText = text;
     notif.className = "notif show " + type;
 
@@ -14,7 +16,7 @@ function showNotif(text, type="success"){
     }, 2000);
 }
 
-// HERO LIST
+// HERO LIST (AMAN)
 const heroListData = [("Aamon"), ("Akai"), ("Aldous"), ("Alice"), ("Alpha"), ("Alucard"), ("Angela"), ("Argus"), ("Arlott"), ("Atlas"), ("Aulus"), ("Aurora"),
 ("Badang"), ("Balmond"), ("Bane"), ("Barats"), ("Baxia"), ("Beatrix"), ("Belerick"), ("Benedetta"), ("Brody"), ("Bruno"),
 ("Carmilla"), ("Cecilion"), ("Chang'e"), ("Chip"), ("Chou"), ("Cici"), ("Clint"), ("Claude"), ("Cyclops"),
@@ -115,7 +117,7 @@ function updateWin(i,val){
     saveData();
 
     if(selectedHeroIndex === i){
-        setTimeout(()=> renderChart(i), 50);
+        renderChart(i); // 🔥 realtime langsung
     }
 }
 
@@ -126,17 +128,26 @@ function updateLose(i,val){
     saveData();
 
     if(selectedHeroIndex === i){
-        setTimeout(()=> renderChart(i), 50);
+        renderChart(i); // 🔥 realtime langsung
     }
 }
 
 // SAVE
 function saveData(){
     localStorage.setItem("heroes", JSON.stringify(heroes));
+
+    let prevHero = selectedHeroIndex !== null ? heroes[selectedHeroIndex]?.hero : null;
+
     render();
+
+    // 🔥 BALIKIN INDEX SETELAH REORDER
+    if(prevHero){
+        let newIndex = heroes.findIndex(h => h.hero === prevHero);
+        selectedHeroIndex = newIndex;
+    }
 }
 
-// GENERATE DATA
+// GRAPH
 function generateWRHistory(h){
     let data = [];
     let win = h.matchAwal * h.wrAwal;
@@ -153,7 +164,6 @@ function generateWRHistory(h){
     return data;
 }
 
-// CHART
 function renderChart(index){
     if(!heroes[index]) return;
 
@@ -170,36 +180,12 @@ function renderChart(index){
                     label: "WR (%)",
                     data: data,
                     borderWidth: 3,
-                    tension: 0.4,
-                    segment: {
-                        borderColor: ctx => {
-                            let i = ctx.p0DataIndex;
-                            let current = data[i];
-                            let next = data[i+1];
-                            if(next === undefined) return "#22c55e";
-                            return next >= current ? "#22c55e" : "#ef4444";
-                        }
-                    }
+                    tension: 0.4
                 }]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false,
-                animation: {
-                    duration: 600,
-                    easing: 'easeOutQuart'
-                },
-                interaction: {
-                    mode: 'nearest',
-                    intersect: false
-                },
-                plugins: {
-                    legend: { labels: { color: "white" } }
-                },
-                scales: {
-                    x: { ticks: { color: "white" } },
-                    y: { ticks: { color: "white" } }
-                }
+                maintainAspectRatio: false
             }
         });
     } else {
@@ -209,25 +195,18 @@ function renderChart(index){
     }
 }
 
-// 🔥 DRAG & REORDER
+// DRAG PC
 let dragIndex = null;
 
-function handleDragStart(e){
+function handleDragStart(){
     dragIndex = +this.dataset.index;
-    this.style.opacity = "0.5";
-}
-
-function handleDragEnd(e){
-    this.style.opacity = "1";
 }
 
 function handleDragOver(e){
     e.preventDefault();
 }
 
-function handleDrop(e){
-    e.preventDefault();
-
+function handleDrop(){
     let dropIndex = +this.dataset.index;
 
     if(dragIndex === dropIndex) return;
@@ -236,10 +215,39 @@ function handleDrop(e){
     heroes.splice(dropIndex,0,moved);
 
     saveData();
-    showNotif("Urutan hero diperbarui!", "update");
 }
 
-// RENDER TABLE
+// TOUCH
+function handleTouchStart(){
+    touchDragIndex = +this.dataset.index;
+}
+
+function handleTouchMove(e){
+    e.preventDefault();
+
+    const touch = e.touches[0];
+    const el = document.elementFromPoint(touch.clientX, touch.clientY);
+    if(!el) return;
+
+    const row = el.closest("tr");
+    if(!row) return;
+
+    let targetIndex = +row.dataset.index;
+
+    if(targetIndex !== touchDragIndex){
+        let moved = heroes.splice(touchDragIndex,1)[0];
+        heroes.splice(targetIndex,0,moved);
+
+        touchDragIndex = targetIndex;
+        render();
+    }
+}
+
+function handleTouchEnd(){
+    saveData();
+}
+
+// RENDER
 function render(){
     let tbody = document.getElementById("tableBody");
     tbody.innerHTML = "";
@@ -262,11 +270,15 @@ function render(){
         <td><button onclick="hapus(${i})">X</button></td>
         `;
 
-        // attach drag events
+        // PC
         row.addEventListener("dragstart", handleDragStart);
-        row.addEventListener("dragend", handleDragEnd);
         row.addEventListener("dragover", handleDragOver);
         row.addEventListener("drop", handleDrop);
+
+        // HP
+        row.addEventListener("touchstart", handleTouchStart);
+        row.addEventListener("touchmove", handleTouchMove);
+        row.addEventListener("touchend", handleTouchEnd);
 
         tbody.appendChild(row);
     });
@@ -276,13 +288,10 @@ function render(){
 function hapus(i){
     heroes.splice(i,1);
     saveData();
-    showNotif("Hero dihapus!", "delete");
 
     if(selectedHeroIndex === i){
-        if(chart){
-            chart.destroy();
-            chart = null;
-        }
+        chart?.destroy();
+        chart = null;
         selectedHeroIndex = null;
     }
 }

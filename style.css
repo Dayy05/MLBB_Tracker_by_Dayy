@@ -53,14 +53,12 @@ cursor: pointer;
 .table-wrapper {
 overflow-x: auto;
 overflow-y: auto;
-
-/* maksimal tampil ~5 row */
 max-height: 280px;
-
 border-radius: 12px;
+-webkit-overflow-scrolling: touch; /* penting buat HP */
 }
 
-/* biar header tetap keliatan */
+/* sticky header */
 thead th {
 position: sticky;
 top: 0;
@@ -137,9 +135,14 @@ th, td {
     font-size: 12px;
 }
 
-/* sedikit lebih kecil biar pas 5 row di HP */
+/* 🔥 FIX 5 HERO DI HP */
 .table-wrapper {
-    max-height: 240px;
+    max-height: 260px;
+}
+
+/* biar drag tidak bentrok scroll */
+table {
+    touch-action: pan-y;
 }
 
 .chart-container {
@@ -171,7 +174,6 @@ th, td {
     padding: 16px;
 }
 
-/* lebih lega di desktop */
 .table-wrapper {
     max-height: 320px;
 }
@@ -179,6 +181,12 @@ th, td {
 .chart-container {
     height: 400px;
 }
+}
+
+/* 🔥 DRAG EFFECT */
+tr.dragging {
+opacity: 0.5;
+background: #1e293b;
 }
 
 /* 🔥 FOOTER */
